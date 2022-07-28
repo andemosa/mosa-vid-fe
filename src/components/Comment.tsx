@@ -1,33 +1,42 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+
 import styled from "styled-components";
+import useSWR from "swr";
 
-const Comment = () => {
-    const [channel, setChannel] = useState({});
+import { Comment as CommentType } from "types";
+import { fetcher } from "utils/config";
 
-    // useEffect(() => {
-    //   const fetchComment = async () => {
-    //     const res = await axios.get(`/users/find/${comment.userId}`);
-    //     setChannel(res.data)
-    //   };
-    //   fetchComment();
-    // }, [comment.userId]);
-  
-    return (
-      <Container>
-        comment
-        {/* <Avatar src={channel.img} />
-        <Details>
-          <Name>
-            {channel.name} <Date>1 day ago</Date>
-          </Name>
-          <Text>{comment.desc}</Text>
-        </Details> */}
-      </Container>
-    );
+interface ICommentProps {
+  comment: CommentType;
 }
 
-export default Comment
+const Comment = ({ comment }: ICommentProps) => {
+  const { data: channel, error: channelError } = useSWR(
+    [`/users/find/${comment.userId}`],
+    fetcher
+  );
+
+  if (!channel && !channelError) {
+    return <span>Loading channel.....</span>;
+  }
+
+  if (channelError) {
+    return <span>An error occured</span>;
+  }
+
+  return (
+    <Container>
+      <Avatar src={channel.img} />
+      <Details>
+        <Name>
+          {channel.name} <Date>1 day ago</Date>
+        </Name>
+        <Text>{comment.desc}</Text>
+      </Details>
+    </Container>
+  );
+};
+
+export default Comment;
 
 const Container = styled.div`
   display: flex;

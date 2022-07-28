@@ -4,7 +4,7 @@ import useSWR from "swr";
 import { format } from "timeago.js";
 
 import { Video } from "types";
-import { fetcher } from "utils/fetcher";
+import { fetcher } from "utils/config";
 
 interface IVideoProps {
   video: Video;

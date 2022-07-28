@@ -5,12 +5,14 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { RootState } from "redux/store";
+import Upload from "./Upload";
 
 const Navbar = () => {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
-  // const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.user);
 
   return (
     <>
@@ -23,10 +25,10 @@ const Navbar = () => {
             />
             <SearchOutlinedIcon onClick={()=>navigate(`/search?q=${q}`)}/>
           </Search>
-          {/* {currentUser ? (
+          {currentUser ? (
             <User>
               <VideoCallOutlinedIcon onClick={() => setOpen(true)} />
-              <Avatar src={currentUser.img} />
+              <Avatar src={currentUser?.img} />
               {currentUser.name}
             </User>
           ) : (
@@ -36,10 +38,10 @@ const Navbar = () => {
                 SIGN IN
               </Button>
             </Link>
-          )} */}
+          )}
         </Wrapper>
       </Container>
-      {/* {open && <Upload setOpen={setOpen} />} */}
+      {open && <Upload setOpen={setOpen} />}
     </>
   );
 }

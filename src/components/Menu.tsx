@@ -21,6 +21,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
 
 import Icon from "assets/logo.png";
+import { RootState } from "redux/store";
 
 interface IMenuProps {
   darkMode: boolean;
@@ -28,6 +29,7 @@ interface IMenuProps {
 }
 
 const Menu = ({ darkMode, setDarkMode }: IMenuProps) => {
+  const { currentUser } = useSelector((state: RootState) => state.user);
   return (
     <Container>
       <Wrapper>
@@ -78,7 +80,7 @@ const Menu = ({ darkMode, setDarkMode }: IMenuProps) => {
           </Login>
           <Hr />
         </>
-        {/* {!currentUser && (
+        {!currentUser && (
           <>
             <Login>
               Sign in to like videos, comment, and subscribe.
@@ -91,7 +93,7 @@ const Menu = ({ darkMode, setDarkMode }: IMenuProps) => {
             </Login>
             <Hr />
           </>
-        )} */}
+        )}
         <Title>BEST OF <span>Mosa-Vid</span></Title>
         <Item>
           <LibraryMusicOutlinedIcon />

@@ -1,41 +1,47 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { RootState } from "redux/store";
 import styled from "styled-components";
+import useSWR from "swr";
+import { Comment as CommentType } from "types";
+import { fetcher } from "utils/config";
 import Comment from "./Comment";
 
-const Comments = () => {
-    // const { currentUser } = useSelector((state) => state.user);
-
-    // const [comments, setComments] = useState([]);
-  
-    // useEffect(() => {
-    //   const fetchComments = async () => {
-    //     try {
-    //       const res = await axios.get(`/comments/${videoId}`);
-    //       setComments(res.data);
-    //     } catch (err) {}
-    //   };
-    //   fetchComments();
-    // }, [videoId]);
-  
-    //TODO: ADD NEW COMMENT FUNCTIONALITY
-  
-    return (
-      <Container>
-        <NewComment>
-          <Avatar src="" />
-          <Input placeholder="Add a comment..." />
-        </NewComment>
-        <Comment />
-        {/* {comments.map(comment=>(
-          <Comment key={comment._id} comment={comment}/>
-        ))} */}
-      </Container>
-    );
+interface ICommentsProps {
+  videoId: string;
 }
 
-export default Comments
+const Comments = ({ videoId }: ICommentsProps) => {
+  const { currentUser } = useSelector((state: RootState) => state.user);
+
+  const { data: comments, error: commentsError } = useSWR(
+    [`/comments/${videoId}`],
+    fetcher
+  );
+
+  if (!comments && !commentsError) {
+    return <span>Loading comments.....</span>;
+  }
+
+  if (commentsError) {
+    return <span>An error occured</span>;
+  }
+
+  //TODO: ADD NEW COMMENT FUNCTIONALITY
+
+  return (
+    <Container>
+      <NewComment>
+        <Avatar src={currentUser?.img} />
+        <Input placeholder="Add a comment..." />
+      </NewComment>
+      {comments.map((comment: CommentType) => (
+        <Comment key={comment._id} comment={comment} />
+      ))}
+    </Container>
+  );
+};
+
+export default Comments;
 
 const Container = styled.div``;
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import Menu from "components/Menu";
 import Navbar from "components/Navbar";
@@ -10,9 +10,12 @@ import { darkTheme, lightTheme } from "utils/Theme";
 import Home from "pages/Home";
 import Video from "pages/Video";
 import SignIn from "pages/SignIn";
+import Search from "pages/Search";
+import { RootState } from "redux/store";
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
+  const { currentUser } = useSelector((state: RootState) => state.user);
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
@@ -30,12 +33,11 @@ function App() {
 
                   <Route path="subscriptions" element={<Home type="sub" />} />
 
-                  {/* <Route path="search" element={<Search />} /> */}
+                  <Route path="search" element={<Search />} />
 
                   <Route
                     path="signin"
-                    element={<SignIn />}
-                    // element={currentUser ? <Home /> : <SignIn />}
+                    element={currentUser ? <Home type="random"/> : <SignIn />}
                   />
 
                   <Route path="video">

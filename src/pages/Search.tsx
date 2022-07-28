@@ -1,23 +1,24 @@
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import useSWR from "swr";
 
 import Card from "components/Card";
+import { Video } from "types";
 import { fetcher } from "utils/config";
 
-import { Video } from "types";
+const Search = () => {
+  const query = useLocation().search;
 
-interface IHomeProps {
-  type: string;
-}
+  const { data: videos, error: videosError } = useSWR(
+    [`/videos/search${query}`],
+    fetcher
+  );
 
-const Home = ({ type }: IHomeProps) => {
-  const { data: videos, error } = useSWR([`/videos/${type}`], fetcher);
-
-  if (!videos && !error) {
-    return <span>Loading.....</span>;
+  if (!videos && !videosError) {
+    return <span>Loading videos.....</span>;
   }
 
-  if (error) {
+  if (videosError) {
     return <span>An error occured</span>;
   }
 
@@ -30,10 +31,10 @@ const Home = ({ type }: IHomeProps) => {
   );
 };
 
-export default Home;
+export default Search;
 
 const Container = styled.div`
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  gap: 10px;
 `;
